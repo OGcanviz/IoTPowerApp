@@ -1,4 +1,4 @@
-# Using PowerApps to Visualize IoT data from Microsoft Azure
+# Using PowerApps to visualize IoT data from Microsoft Azure
 
 In this module we show you how to use Azure to intake, process, analyze and store IoT data then visualize it in a Microsoft PowerApps app. Learn how to seamlessly combine the technologies to provide insights into data and take action on it instantly.
 
@@ -37,7 +37,7 @@ The PowerApp uses the following connectors:
 
 It will take you about **15-20 minutes** to deploy and configure this sample.
 
-### Create Azure resources
+### Create Azure Resources
 
 <details>
 
@@ -390,7 +390,7 @@ Now the fun part, run the PowerApp!
    
 </p></details>
 
-### Follow Up
+## Follow Up ##
 
 For more awesome PowerApps tips, tricks, and samples, check out our blogs.
 
@@ -407,6 +407,7 @@ For more awesome PowerApps tips, tricks, and samples, check out our blogs.
 | Development                            			| Alex Belikov (Canviz) 						|
 | Testing                                  		| Melody She (Canviz) @melodyshe   					|
 | Design                                  		| Justin So (Canviz)    					|
+|                                   		| Casey Burke (Microsoft)    					|
 
 
 ## Version history ##
