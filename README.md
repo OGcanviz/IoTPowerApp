@@ -12,7 +12,7 @@ The following diagram illustrates the different components in the solution.
 
 <kbd>![Architecture](images/powerapps-iot-architecture.png)</kbd>
 
-Here's how it works:
+### How It Works
 
 The producer (a .Net console application) simulates sensors attached to taxis.  It reads data from .txt files that contain taxi data.  Each text file correlates to one taxi.  The producer emits data on a regular basis (this is configurable in the appsettings.json file), including the taxi's current location and distance traveled.  The producer sends the data to an Azure IoT Hub.
 
