@@ -163,8 +163,12 @@ After the Azure resources are deployed you can deploy the Function App.  This se
 
 ##  Validate the Azure resources are successfully deployed and configured
 
+<details>
+	
 Now you will run the console application to send taxi data to the Azure.  This section describes how to do it.
 
+<summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>
+	
 >**Note:** If you wish to run the producer from Visual Studio, please see the instructions in the [ConsoleAppsReadme.md](clients/ConsoleAppsReadme.md).
 
 Use the command-line producer for macOS, Linux, or Windows to produce messages into the stream.
@@ -260,6 +264,8 @@ Use the command-line producer for macOS, Linux, or Windows to produce messages i
 
    When you see data appearing in the Azure Storage Table you can move on to the next steps.
 
+</p></details>
+
 ## PowerApps Deployment
 
 ### Import Custom Connector
@@ -342,7 +348,12 @@ The import process used for this sample includes creating a PowerApp in the Powe
 
 ### Run the PowerApp
 
-   
+<details>
+
+Now the fun part, run the PowerApp!
+
+<summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>   
+	
 1. Get a Bing Map Key [here](https://www.microsoft.com/en-us/maps/create-a-bing-maps-key).  A Bing Map API Key is required to display the map.
 
 1. In a web browser, go to https://web.powerapps.com and login with your Office 365 account.
@@ -372,7 +383,8 @@ The import process used for this sample includes creating a PowerApp in the Powe
 3. Now the app looks like this.
 
    <kbd>![Start](images/powerapps-iot-view.png)</kbd>
-
+   
+</p></details>
 
 ### Follow Up
 
