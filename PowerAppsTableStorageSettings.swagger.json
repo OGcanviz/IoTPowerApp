@@ -1,0 +1,178 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "PowerAppsTableStorageSettings",
+        "description": "",
+        "version": "1.0"
+    },
+    "host": "powerappsiot.azurewebsites.net",
+    "basePath": "/",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [],
+    "produces": [],
+    "paths": {
+        "/api/IoTTableStorageFunction": {
+            "get": {
+                "responses": {
+                    "default": {
+                        "description": "default",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "Latitude": {
+                                        "type": "string",
+                                        "description": "Latitude"
+                                    },
+                                    "Longitude": {
+                                        "type": "string",
+                                        "description": "Longitude"
+                                    },
+                                    "Mileage": {
+                                        "type": "number",
+                                        "format": "double",
+                                        "description": "Mileage",
+                                        "title": ""
+                                    },
+                                    "PartitionKey": {
+                                        "type": "string",
+                                        "description": "PartitionKey"
+                                    },
+                                    "RowKey": {
+                                        "type": "string",
+                                        "description": "RowKey"
+                                    },
+                                    "Timestamp": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "description": "Timestamp"
+                                    },
+                                    "ETag": {
+                                        "type": "string",
+                                        "description": "ETag"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "GetTaxiData",
+                "description": "",
+                "operationId": "GetTaxiData",
+                "x-ms-visibility": "important",
+                "parameters": [{
+                        "name": "partitionKey",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "top",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "timestamp",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                ]
+            }
+        },
+        "/api/GetLastOilChange": {
+            "get": {
+                "responses": {
+                    "default": {
+                        "description": "default",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "TaxiId": {
+                                        "type": "string",
+                                        "description": "TaxiId"
+                                    },
+                                    "Mileage": {
+                                        "type": "number",
+                                        "format": "double",
+                                        "description": "Mileage"
+                                    },
+                                    "DriverId": {
+                                        "type": "string",
+                                        "description": "DriverId"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "GetLastOilChange",
+                "operationId": "GetLastOilChange",
+                "parameters": []
+            }
+        },
+        "/api/SetLastOilChange": {
+            "post": {
+                "responses": {
+                    "default": {
+                        "description": "default",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "summary": "SetLastOilChange",
+                "operationId": "SetLastOilChange",
+                "parameters": [{
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "default": "application/json",
+                        "x-ms-visibility": "internal"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "Mileage": {
+                                        "type": "number",
+                                        "description": "Mileage",
+                                        "format": "double"
+                                    },
+                                    "TaxiId": {
+                                        "type": "string",
+                                        "description": "TaxiId"
+                                    },
+                                    "DriverId": {
+                                        "type": "string",
+                                        "description": "TaxiId"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {},
+    "parameters": {},
+    "responses": {},
+    "securityDefinitions": {},
+    "security": [],
+    "tags": []
+}

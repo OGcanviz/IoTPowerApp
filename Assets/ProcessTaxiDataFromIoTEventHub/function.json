@@ -1,0 +1,12 @@
+{
+    "bindings": [{
+        "type": "eventHubTrigger",
+        "name": "myEventHubMessage",
+        "connection": "TaxiDataIoTHub_events_IOTHUB",
+        "path": "iothub-ehub-iothubnv4p-603973-f539fbe5bc",
+        "consumerGroup": "ProcessTaxiDataFromIoTEventHub",
+        "cardinality": "many",
+        "direction": "in"
+    }],
+    "disabled": false
+}

@@ -1,0 +1,295 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {
+        "hostplanName": "[concat('HostPlan-', uniqueString(resourceGroup().id))]",
+        "functionAppName": "[concat('FunctionApp-', uniqueString(resourceGroup().id))]",
+        "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'standardsa')]",
+        "storageAccountType": "Standard_LRS",
+        "iotHubName": "[concat('IoTHub-', uniqueString(resourceGroup().id))]",
+        "consumerGroupName": "ProcessTaxiDataFromIoTEventHub",
+        "sendEmailFlowName": "[concat('SendEmail-', uniqueString(resourceGroup().id))]",
+        "connectionsOffice365Name": "office365",
+        "streamingJobsName": "[concat('TaxiDataStreamAnalytics-', uniqueString(resourceGroup().id))]"
+    },
+    "resources": [{
+            "apiVersion": "2015-08-01",
+            "name": "[variables('hostplanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "HostingPlan"
+            },
+            "sku": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            },
+            "properties": {
+                "name": "[variables('hostplanName')]"
+            }
+        },
+        {
+            "apiVersion": "2015-08-01",
+            "name": "[variables('functionAppName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[resourceGroup().location]",
+            "kind": "functionapp",
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostplanName'))]",
+                "siteConfig": {
+                    "AlwaysOn": true
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverFarms', variables('hostplanName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.Logic/workflows',variables('sendEmailFlowName'))]",
+                "[resourceId('Microsoft.Devices/IotHubs',variables('iotHubName'))]"
+            ],
+            "resources": [{
+                "apiVersion": "2015-08-01",
+                "name": "appsettings",
+                "type": "config",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Web/Sites/', variables('functionAppName'))]",
+                    "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                    "[resourceId('Microsoft.Logic/workflows',variables('sendEmailFlowName'))]",
+                    "[resourceId('Microsoft.Devices/IotHubs',variables('iotHubName'))]"
+                ],
+                "properties": {
+                    "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',concat(listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')),'2017-06-01').keys[0].value))]",
+                    "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',concat(listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')),'2017-06-01').keys[0].value))]",
+                    "FUNCTIONS_EXTENSION_VERSION": "~1",
+                    "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',concat(listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')),'2017-06-01').keys[0].value))]",
+                    "WEBSITE_CONTENTSHARE": "[variables('storageAccountName')]",
+                    "WEBSITE_NODE_DEFAULT_VERSION": "6.5.0",
+                    "SendEmailFunctionURL": "[listCallBackUrl(resourceId('Microsoft.Logic/workflows/triggers',variables('sendEmailFlowName'), 'manual'), '2017-07-01').value]",
+                    "TaxiDataIoTHub_events_IOTHUB": "[concat('Endpoint=', reference(concat('Microsoft.Devices/IotHubs/', variables('iotHubName')), '2017-07-01').eventHubEndpoints.events.endpoint, ';SharedAccessKeyName=iothubowner;SharedAccessKey=', listKeys(resourceId('Microsoft.Devices/IotHubs',variables('iotHubName')), '2017-07-01').value[0].primaryKey, ';EntityPath=', reference(concat('Microsoft.Devices/IotHubs/', variables('iotHubName')), '2017-07-01').eventHubEndpoints.events.path)]"
+                }
+            }]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('storageAccountName')]",
+            "apiVersion": "2016-01-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "[variables('storageAccountType')]"
+            },
+            "kind": "Storage",
+            "properties": {}
+        },
+        {
+            "apiVersion": "2017-07-01",
+            "type": "Microsoft.Devices/IotHubs",
+            "location": "[resourceGroup().location]",
+            "name": "[variables('iotHubName')]",
+            "properties": {
+                "eventHubEndpoints": {
+                    "events": {
+                        "retentionTimeInDays": "1",
+                        "partitionCount": "2"
+                    }
+                }
+            },
+            "sku": {
+                "name": "F1",
+                "capacity": "1"
+            }
+        },
+        {
+            "apiVersion": "2017-07-01",
+            "dependsOn": [
+                "[concat('Microsoft.Devices/iothubs/', variables('iotHubName'))]"
+            ],
+            "name": "[concat(variables('iotHubName'), '/events/',variables('consumerGroupName'))]",
+            "type": "Microsoft.Devices/iotHubs/eventhubEndpoints/ConsumerGroups"
+        },
+        {
+            "type": "Microsoft.Logic/workflows",
+            "name": "[variables('sendEmailFlowName')]",
+            "apiVersion": "2017-07-01",
+            "location": "[resourceGroup().location]",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "manual": {
+                            "type": "Request",
+                            "kind": "Http",
+                            "inputs": {
+                                "schema": {
+                                    "properties": {
+                                        "body": {
+                                            "type": "string"
+                                        },
+                                        "subject": {
+                                            "type": "string"
+                                        },
+                                        "to": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "actions": {
+                        "Response": {
+                            "runAfter": {
+                                "Send_an_email": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Response",
+                            "kind": "Http",
+                            "inputs": {
+                                "body": "@body('Send_an_email')",
+                                "statusCode": 200
+                            }
+                        },
+                        "Send_an_email": {
+                            "runAfter": {},
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "Body": "@triggerBody()?['body']",
+                                    "IsHtml": true,
+                                    "Subject": "@triggerBody()?['subject']",
+                                    "To": "@triggerBody()?['to']"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['office365']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/Mail"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "office365": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', variables('connectionsOffice365Name'))]",
+                                "connectionName": "office365",
+                                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/eastus/managedApis/', variables('connectionsOffice365Name'))]"
+                            }
+                        }
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', variables('connectionsOffice365Name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "name": "[variables('connectionsOffice365Name')]",
+            "apiVersion": "2016-06-01",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/eastus/managedApis/', variables('connectionsOffice365Name'))]"
+                }
+            },
+            "dependsOn": []
+        }, {
+            "type": "Microsoft.StreamAnalytics/streamingjobs",
+            "name": "[variables('streamingJobsName')]",
+            "apiVersion": "2016-03-01",
+            "location": "East US",
+            "properties": {
+                "sku": {
+                    "name": "Standard"
+                },
+                "outputStartMode": "JobStartTime",
+                "eventsOutOfOrderPolicy": "Adjust",
+                "outputErrorPolicy": "Stop",
+                "eventsOutOfOrderMaxDelayInSeconds": 0,
+                "eventsLateArrivalMaxDelayInSeconds": 5,
+                "dataLocale": "en-US",
+                "compatibilityLevel": "1.0",
+                "transformation": {
+                    "name": "TaxiDataTransformation",
+                    "properties": {
+                        "query": "SELECT * INTO [TaxiDataIoTStreamAnalyticsOutput] FROM [TaxiDataIoTHubInput]"
+                    }
+                },
+                "inputs": [{
+                    "name": "TaxiDataIoTHubInput",
+                    "properties": {
+                        "type": "Stream",
+                        "datasource": {
+                            "type": "Microsoft.Devices/IotHubs",
+                            "properties": {
+                                "iotHubNamespace": "[variables('iotHubName')]",
+                                "sharedAccessPolicyName": "iothubowner",
+                                "sharedAccessPolicyKey": "[listKeys(resourceId('Microsoft.Devices/IotHubs',variables('iotHubName')), '2017-07-01').value[0].primaryKey]",
+                                "endpoint": "messages/events",
+                                "consumerGroupName": "$Default"
+                            }
+                        },
+                        "serialization": {
+                            "type": "Json",
+                            "properties": {
+                                "encoding": "UTF8"
+                            }
+                        }
+                    }
+                }],
+                "outputs": [{
+                    "name": "TaxiDataIoTStreamAnalyticsOutput",
+                    "properties": {
+                        "datasource": {
+                            "type": "Microsoft.Storage/Table",
+                            "properties": {
+                                "accountName": "[variables('storageAccountName')]",
+                                "table": "TaxiDataFromIoTHub",
+                                "partitionKey": "PartitionKey",
+                                "accountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')),'2017-06-01').keys[0].value]",
+                                "rowKey": "RowKey",
+                                "columnsToRemove": null,
+                                "batchSize": 100
+                            }
+                        }
+                    }
+                }]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.Devices/IotHubs',variables('iotHubName'))]"
+            ]
+        }
+    ],
+    "outputs": {
+        "functionAppName": {
+            "type": "string",
+            "value": "[variables('functionAppName')]"
+        },
+        "iotHubEndpointPath": {
+            "type": "string",
+            "value": "[reference(concat('Microsoft.Devices/IotHubs/', variables('iotHubName')), '2017-07-01').eventHubEndpoints.events.path]"
+        }
+    }
+}
