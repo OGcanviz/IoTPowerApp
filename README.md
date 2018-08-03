@@ -2,6 +2,10 @@
 
 In this module we show you how to use Azure to intake, process, analyze and store IoT data then visualize it in a Microsoft PowerApps app. Learn how to seamlessly combine the technologies to provide insights into data and take action on it instantly.
 
+When you are done installing this sample you will have a cool PowerApp that looks like this.  The PowerApps shows taxis driving around Beijing, China and if they are approching an oil change or are past the point where they need an oil change.
+
+<kbd>![PowerApp](images/powerapps-iot-view.png)</kbd>
+
 ## Architecture Overview
 
 The following diagram illustrates the different components in the solution.
