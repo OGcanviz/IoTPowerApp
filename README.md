@@ -1,6 +1,10 @@
-# Using PowerApps to Visualize IoT data from Microsoft Azure
+# Using PowerApps to visualize IoT data from Microsoft Azure
 
 In this module we show you how to use Azure to intake, process, analyze and store IoT data then visualize it in a Microsoft PowerApps app. Learn how to seamlessly combine the technologies to provide insights into data and take action on it instantly.
+
+When you are done installing this sample you will have a cool PowerApp that looks like this.  The PowerApps shows taxis driving around Beijing, China and if they are approching an oil change or are past the point where they need an oil change.
+
+<kbd>![PowerApp](images/powerapps-iot-view.png)</kbd>
 
 ## Architecture Overview
 
@@ -8,7 +12,7 @@ The following diagram illustrates the different components in the solution.
 
 <kbd>![Architecture](images/powerapps-iot-architecture.png)</kbd>
 
-Here's how it works:
+### How It Works
 
 The producer (a .Net console application) simulates sensors attached to taxis.  It reads data from .txt files that contain taxi data.  Each text file correlates to one taxi.  The producer emits data on a regular basis (this is configurable in the appsettings.json file), including the taxi's current location and distance traveled.  The producer sends the data to an Azure IoT Hub.
 
@@ -33,7 +37,7 @@ The PowerApp uses the following connectors:
 
 It will take you about **15-20 minutes** to deploy and configure this sample.
 
-### Create Azure resources
+### Create Azure Resources
 
 <details>
 
@@ -162,13 +166,17 @@ After the Azure resources are deployed you can deploy the Function App.  This se
 
 ##  Validate the Azure resources are successfully deployed and configured
 
+<details>
+	
 Now you will run the console application to send taxi data to the Azure.  This section describes how to do it.
 
->**Note:** If you wish to run the producer from Visual Studio, please see the instructions in the [ConsoleAppsReadme.md](../clients/ConsoleAppsReadme.md).
+<summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>
+	
+>**Note:** If you wish to run the producer from Visual Studio, please see the instructions in the [ConsoleAppsReadme.md](clients/ConsoleAppsReadme.md).
 
 Use the command-line producer for macOS, Linux, or Windows to produce messages into the stream.
 
-1. First, download the producer for macOS ([producer-osx-x64.zip](../clients/binary/producer-osx-x64.zip)), Linux ([producer-linux-x64.zip](../clients/binary/producer-linux-x64.zip)) and Windows ([producer-win10-x64.zip](../clients/binary/producer-win10-x64.zip)).
+1. First, download the producer for macOS ([producer-osx-x64.zip](clients/binary/producer-osx-x64.zip)), Linux ([producer-linux-x64.zip](clients/binary/producer-linux-x64.zip)) and Windows ([producer-win10-x64.zip](clients/binary/producer-win10-x64.zip)).
 2. Unzip the file.
 3. Open the appsettings.json file.
 4. Update the **connectionString** value with the **IOT_HUB_CONNECTION_STRING** value you saved in the text file.
@@ -258,6 +266,8 @@ Use the command-line producer for macOS, Linux, or Windows to produce messages i
    <kbd>![Azure Table Storage](images/powerapps-iot-cosmosdb.png)</kbd>
 
    When you see data appearing in the Azure Storage Table you can move on to the next steps.
+
+</p></details>
 
 ## PowerApps Deployment
 
@@ -380,6 +390,12 @@ This section describes how to create a Bing Maps API Key.
 
 ### Run the PowerApp
 
+<details>
+
+Now the fun part, run the PowerApp!
+
+<summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>   
+
    
 1. In a web browser, go to https://web.powerapps.com and login with your Office 365 account.
 
@@ -427,6 +443,7 @@ For more awesome PowerApps tips, tricks, and samples, check out our blogs.
 | Development                            			| Alex Belikov (Canviz) 						|
 | Testing                                  		| Melody She (Canviz) @melodyshe   					|
 | Design                                  		| Justin So (Canviz)    					|
+|                                   		| Casey Burke (Microsoft)    					|
 
 
 ## Version history ##
