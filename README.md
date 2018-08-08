@@ -1,10 +1,6 @@
-# Using PowerApps to visualize IoT data from Microsoft Azure
+# Using PowerApps to Visualize IoT data from Microsoft Azure
 
 In this module we show you how to use Azure to intake, process, analyze and store IoT data then visualize it in a Microsoft PowerApps app. Learn how to seamlessly combine the technologies to provide insights into data and take action on it instantly.
-
-When you are done installing this sample you will have a cool PowerApp that looks like this.  The PowerApps shows taxis driving around Beijing, China and if they are approching an oil change or are past the point where they need an oil change.
-
-<kbd>![PowerApp](images/powerapps-iot-view.png)</kbd>
 
 ## Architecture Overview
 
@@ -12,7 +8,7 @@ The following diagram illustrates the different components in the solution.
 
 <kbd>![Architecture](images/powerapps-iot-architecture.png)</kbd>
 
-### How It Works
+Here's how it works:
 
 The producer (a .Net console application) simulates sensors attached to taxis.  It reads data from .txt files that contain taxi data.  Each text file correlates to one taxi.  The producer emits data on a regular basis (this is configurable in the appsettings.json file), including the taxi's current location and distance traveled.  The producer sends the data to an Azure IoT Hub.
 
@@ -37,7 +33,7 @@ The PowerApp uses the following connectors:
 
 It will take you about **15-20 minutes** to deploy and configure this sample.
 
-### Create Azure Resources
+### Create Azure resources
 
 <details>
 
@@ -53,13 +49,10 @@ We have created an ARM template that deploys most of the Azure resources automat
 
 <summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>
 
-1. Log into the Azure Management Portal with an account that has permissions to deploy new Azure resources.
-2. To deploy the custom ARM template through the portal, click **Create a resource** and search for **Template Deployment** until you can select it from the options.
-3. Click **Template Deployment**.
-4. Click **Create**.
-5. You see several options for creating a template. Click **Build your own template in the editor**.
-6. You now have a blank template that is available for customizing. Delete the JSON in the blank template, then copy and paste the JSON from the [azuredeploy.json](./azuredeploy.json) file into the editor.
-7. Click **Save**.
+1. Click this button to navigate to the Azure portal deployment page.
+   
+   [![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FOGcanviz%2FIoTPowerApp%2Fmaster%2Fazuredeploy.json)
+
 8. Enter a name for the **Resource group**.
 
     ![Template Deployment](images/powerapps-iot-templatedeployment.png)
@@ -81,11 +74,11 @@ We have created an ARM template that deploys most of the Azure resources automat
 
 17. In the **Overview** tab for the resource group, click **office365**.
 
-	<kbd>![Go to resource group](images/powerapps-iot-office365.png)</kbd>
+	<kbd>![Resource group overview](images/powerapps-iot-office365.png)</kbd>
 
 17. Under the menu in the **Overview** tab for the Office365 API Connection, click **This connection is not authenticated**.
 
-	<kbd>![Go to resource group](images/powerapps-iot-office365-overview.png)</kbd>
+	<kbd>![Office365 overview](images/powerapps-iot-office365-overview.png)</kbd>
 
 17. Click **Authorize** to sign in with your account, then click **Save**.
 
@@ -111,7 +104,7 @@ We have created an ARM template that deploys most of the Azure resources automat
 
 17. Click the device you just created, then copy the **Connection string (primary key)** in the device details page, and save it as **IOT_HUB_CONNECTION_STRING** in your text file.
 
-	<kbd>![Add device](images/powerapps-iot-hub-device-connection.png)</kbd>
+	<kbd>![Device connection string](images/powerapps-iot-hub-device-connection.png)</kbd>
 
 </p></details>
 
@@ -122,6 +115,8 @@ We have created an ARM template that deploys most of the Azure resources automat
 After the Azure resources are deployed you can deploy the Function App.  This section describes how to do that.
 
 <summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>
+
+1. [Download](https://codeload.github.com/OGcanviz/IoTPowerApp/zip/master)  and extract or Clone the repo from https://github.com/OGcanviz/IoTPowerApp
 
 1. Open the file [Assets/ProcessTaxiDataFromIoTEventHub/function.json](./Assets/ProcessTaxiDataFromIoTEventHub/function.json)
 
@@ -167,17 +162,13 @@ After the Azure resources are deployed you can deploy the Function App.  This se
 
 ##  Validate the Azure resources are successfully deployed and configured
 
-<details>
-	
 Now you will run the console application to send taxi data to the Azure.  This section describes how to do it.
 
-<summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>
-	
->**Note:** If you wish to run the producer from Visual Studio, please see the instructions in the [ConsoleAppsReadme.md](clients/ConsoleAppsReadme.md).
+>**Note:** If you wish to run the producer from Visual Studio, please see the instructions in the [ConsoleAppsReadme.md](../clients/ConsoleAppsReadme.md).
 
 Use the command-line producer for macOS, Linux, or Windows to produce messages into the stream.
 
-1. First, download the producer for macOS ([producer-osx-x64.zip](clients/binary/producer-osx-x64.zip)), Linux ([producer-linux-x64.zip](clients/binary/producer-linux-x64.zip)) and Windows ([producer-win10-x64.zip](clients/binary/producer-win10-x64.zip)).
+1. First, download the producer for macOS ([producer-osx-x64.zip](../clients/binary/producer-osx-x64.zip)), Linux ([producer-linux-x64.zip](../clients/binary/producer-linux-x64.zip)) and Windows ([producer-win10-x64.zip](../clients/binary/producer-win10-x64.zip)).
 2. Unzip the file.
 3. Open the appsettings.json file.
 4. Update the **connectionString** value with the **IOT_HUB_CONNECTION_STRING** value you saved in the text file.
@@ -268,8 +259,6 @@ Use the command-line producer for macOS, Linux, or Windows to produce messages i
 
    When you see data appearing in the Azure Storage Table you can move on to the next steps.
 
-</p></details>
-
 ## PowerApps Deployment
 
 ### Import Custom Connector
@@ -314,7 +303,7 @@ This section describes how to deploy the custom connector named PowerAppsTableSt
 
 6. Create a connection to the Custom Connector you just created by clicking the add mark in Custom Connector item.
 
-   <kbd>![Change Host Name](images/powerapps-iot-create-custom-connection.png)</kbd>
+   <kbd>![Create Custom Connection](images/powerapps-iot-create-custom-connection.png)</kbd>
 
 </p></details>
 
@@ -329,15 +318,15 @@ The import process used for this sample includes creating a PowerApp in the Powe
 
 2. Click **Apps** in the left menu, then click **Import package (preview)**.
 
-   <kbd>![Custom Connectors](images/powerapps-iot-import-powerapps.png)</kbd>
+   <kbd>![Import Package](images/powerapps-iot-import-powerapps.png)</kbd>
 
 3. Click **Upload** in the following page, then select the file [FleetTracker.zip](FleetTracker.zip).
 
-   <kbd>![Import package](images/powerapps-iot-upload-package.png)</kbd>
+   <kbd>![Upload Package](images/powerapps-iot-upload-package.png)</kbd>
 
 4. After the upload is complete, you will see this page.
 
-   <kbd>![Import package](images/powerapps-iot-fix-errors.png)</kbd>
+   <kbd>![Import Package Configuration](images/powerapps-iot-fix-errors.png)</kbd>
 
 6. Click the settings button for **PowerAppsTableStorageSettings**, select the custom connector you just created, then click **Save**. 
 
@@ -350,16 +339,48 @@ The import process used for this sample includes creating a PowerApp in the Powe
 </p>
 </details>
 
-### Run the PowerApp
-
+### Get a Bing Map Key
 <details>
 
-Now the fun part, run the PowerApp!
+This section describes how to create a Bing Maps API Key.
 
-<summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>   
-	
-1. Get a Bing Map Key [here](https://www.microsoft.com/en-us/maps/create-a-bing-maps-key).  A Bing Map API Key is required to display the map.
+<summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>
+1. Log into the Azure Management Portal with an account that has permissions to deploy new Azure resources.
 
+2. Click **Create a resource**, then input `Bing Maps API for Enterprise` in search box, then press **Enter**
+
+   <kbd>![Search for Bing Maps API for Enterprise](images/powerapps-iot-bing-map-create.png)</kbd>
+
+2. Fill the field name and select the resource group you just created, then Select the Price Tier to **Public Website Transactions Level 1**.
+
+   >**Note:** In this case, the name is **BingMapsAPI**, you can take any name you like.
+
+   <kbd>![Create Bing Map](images/powerapps-iot-bing-map-create-form.png)</kbd>
+   
+2. Click Legal terms, then click **Create**.
+
+   <kbd>![Bing Maps Legal Terms](images/powerapps-iot-bing-map-legal-terms.png)</kbd>
+   
+2. Click **Create**.
+
+3. After creation complete, open the resource group you selected, then click the **BingMapsAPI** item.
+
+   <kbd>![Select Bing Maps](images/powerapps-iot-bing-map-api.png)</kbd>
+
+3. Click the Key icon like this.
+
+   <kbd>![Select Bing Maps](images/powerapps-iot-bing-map-settings.png)</kbd>
+
+3. You can copy the **Master Key** or **Query Key** as **Bing Map API Key**
+
+   <kbd>![Select Bing Maps](images/powerapps-iot-bing-map-keys.png)</kbd>
+
+</p>
+</details>
+
+### Run the PowerApp
+
+   
 1. In a web browser, go to https://web.powerapps.com and login with your Office 365 account.
 
 2. Click **Apps** in the left menu, then click the App you just created.
@@ -387,10 +408,9 @@ Now the fun part, run the PowerApp!
 3. Now the app looks like this.
 
    <kbd>![Start](images/powerapps-iot-view.png)</kbd>
-   
-</p></details>
 
-## Follow Up ##
+
+### Follow Up
 
 For more awesome PowerApps tips, tricks, and samples, check out our blogs.
 
@@ -402,12 +422,11 @@ For more awesome PowerApps tips, tricks, and samples, check out our blogs.
 | Roles                                    		| Author(s)                                			|
 | ------------------------------------------- | ------------------------------------------------- |
 | Project Lead / Architect / Development      | Todd Baginski (Microsoft MVP, Canviz) @tbag		|
-| Development                            			| Hubert Sui (Canviz)  						|
+| Development                            			| Hubert Sui (Canviz) @hubertsui  						|
 | Development                            			| Manfred Wittenbols (Canviz)  						|
 | Development                            			| Alex Belikov (Canviz) 						|
 | Testing                                  		| Melody She (Canviz) @melodyshe   					|
 | Design                                  		| Justin So (Canviz)    					|
-|                                   		| Casey Burke (Microsoft)    					|
 
 
 ## Version history ##

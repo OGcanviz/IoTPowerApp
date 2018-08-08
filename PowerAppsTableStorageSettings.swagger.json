@@ -159,7 +159,7 @@
                                     },
                                     "DriverId": {
                                         "type": "string",
-                                        "description": "TaxiId"
+                                        "description": "DriverId"
                                     }
                                 }
                             }
