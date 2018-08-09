@@ -149,11 +149,11 @@ After the Azure resources are deployed you can deploy the Function App.  This se
 
 2. Click **site**, then click **wwwroot** to go to the D:\home\site\wwwroot directory.
 
-	>**Note:** You should configure the email address where the notifications are sent in the ProcessTaxiDataFromIoTEventHub Azure Function by changing the value for the MaintenanceManager variable before you upload the files.  You can also change this setting after the files are uploaded by editing it in the Azure Portal.
+3. Configure the email address where the notifications are sent in the ProcessTaxiDataFromIoTEventHub Azure Function by changing the value for the MaintenanceManager variable in the [ProcessTaxiDataFromIoTEventHub/run.csx](Assets/ProcessTaxiDataFromIoTEventHub/run.csx) file before you upload the files.  You can also change this setting after the files are uploaded by editing it in the Azure Portal.
 	
-3. Upload the [GetLastOilChange](assets/), [IoTTableStorageFunction](assets/), [ProcessTaxiDataFromIoTEventHub](assets/) and [SetLastOilChange](assets/) folders by dragging and dropping them from your local file system to the wwwroot folder at the top half of the page.
+4. Upload the [GetLastOilChange](../../tree/master/Assets/GetLastOilChange), [IoTTableStorageFunction](../../tree/master/Assets/IoTTableStorageFunction), [ProcessTaxiDataFromIoTEventHub](../../tree/master/Assets/ProcessTaxiDataFromIoTEventHub) and [SetLastOilChange](../../tree/master/Assets/SetLastOilChange) folders by dragging and dropping them from your local file system to the wwwroot folder at the top half of the page.
  
-   >**Note:** You may have to manually create the [GetLastOilChange](assets/), [IoTTableStorageFunction](assets/), [ProcessTaxiDataFromIoTEventHub](assets/) and [SetLastOilChange](assets/) folders in some browsers and then drag & drop the files into the new folder.
+   >**Note:** You may have to manually create the [GetLastOilChange](../../tree/master/Assets/GetLastOilChange), [IoTTableStorageFunction](../../tree/master/Assets/IoTTableStorageFunction), [ProcessTaxiDataFromIoTEventHub](../../tree/master/Assets/ProcessTaxiDataFromIoTEventHub) and [SetLastOilChange](../../tree/master/Assets/SetLastOilChange) folders in some browsers and then drag & drop the files into the new folder.
 
    <kbd>![App Service Folder](images/powerapps-iot-appwwwfolder.png)</kbd>
 
@@ -168,7 +168,7 @@ After the Azure resources are deployed you can deploy the Function App.  This se
 
 <details>
 	
-Now you will run the console application to send taxi data to the Azure.  This section describes how to do it.
+Now you will run the console application to send taxi data to the Azure IoT Event Hub.  This section describes how to do it.
 
 <summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>
 	
@@ -178,7 +178,7 @@ Use the command-line producer for macOS, Linux, or Windows to produce messages i
 
 1. First, download the producer for macOS ([producer-osx-x64.zip](clients/binary/producer-osx-x64.zip)), Linux ([producer-linux-x64.zip](clients/binary/producer-linux-x64.zip)) and Windows ([producer-win10-x64.zip](clients/binary/producer-win10-x64.zip)).
 2. Unzip the file.
-3. Open the appsettings.json file.
+3. Open the **appsettings.json** file.
 4. Update the **connectionString** value with the **IOT_HUB_CONNECTION_STRING** value you saved in the text file.
 
    ```javascript
@@ -191,7 +191,7 @@ Use the command-line producer for macOS, Linux, or Windows to produce messages i
     }
    ```
 
-   > Note: If you wish to simulate multiple taxis, include multiple source data files in the clientFiles value, like this:
+   > **Note:** If you wish to simulate multiple taxis, include multiple source data files in the clientFiles value, like this:
 
    ```javascript
     {
@@ -202,7 +202,7 @@ Use the command-line producer for macOS, Linux, or Windows to produce messages i
       }
     }
    ```
-    > Note: If you wish to speed up the rate the data is sent to Azure, increase the speed value.  This will make the taxis appear to drive around faster and log more miles quicker.
+    > **Note:** If you wish to speed up the rate the data is sent to Azure, increase the speed value.  This will make the taxis appear to drive around faster and log more miles quicker.
 
    ```javascript
     {
@@ -213,7 +213,7 @@ Use the command-line producer for macOS, Linux, or Windows to produce messages i
       }
     }
    ```
-    > Note: If you wish to add a initial mileage to each taxi, add a baseMileages setting for each taxi.
+    > **Note:** If you wish to add a initial mileage to each taxi, add a baseMileages setting for each taxi.
 
    ```javascript
     {
@@ -240,7 +240,7 @@ Use the command-line producer for macOS, Linux, or Windows to produce messages i
     }
    ```
 5. **Save** the file.
-6. Open a Command Prompt on your local machine, then go to the folder that hosts the extracted taxi producer files and run the taxi data producer to start emitting sensor data to the Azure.
+6. Open a **Command Prompt** on your local machine, then go to the folder that hosts the extracted taxi producer files and run the taxi data producer to start emitting sensor data to the Azure.
 
    In Mac & Linux environments, run the following command: 
     ```console
@@ -291,7 +291,7 @@ This section describes how to deploy the custom connector named PowerAppsTableSt
 
 3. Enter the **Custom connector title**, select **Upload an OpenAPI file**, then click **Continue**.
 
-    > Note: Use the value and file linked in the table below to complete this step.
+    > **Note:** Use the value and file linked in the table below to complete this step.
 
     Fields|Value
     -|-
@@ -320,7 +320,7 @@ This section describes how to deploy the custom connector named PowerAppsTableSt
 ### Import the PowerApp
 
 <details>
-The import process used for this sample includes creating a PowerApp in the PowerApps editor, then importing the example PowerApp into the PowerApp you created.  This particular approach is necessary because Custom Connectors can only be updated during import, not created as new items.
+Now you will import the PowerApp to your PowerApps environment and configure it to use the custom connector.  These steps describe how to do it.
 
 <summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>
 
@@ -352,36 +352,36 @@ The import process used for this sample includes creating a PowerApp in the Powe
 ### Get a Bing Map Key
 <details>
 
-This section describes how to create a Bing Maps API Key.
+This section describes how to create a Bing Maps API Key.  The Bing Maps API Key is required to display maps in the PowerApp.
 
 <summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>
 1. Log into the Azure Management Portal with an account that has permissions to deploy new Azure resources.
 
-2. Click **Create a resource**, then input `Bing Maps API for Enterprise` in search box, then press **Enter**
+2. Click **Create a resource**, then enter `Bing Maps API for Enterprise` in search box and press **Enter**.
 
    <kbd>![Search for Bing Maps API for Enterprise](images/powerapps-iot-bing-map-create.png)</kbd>
 
-2. Fill the field name and select the resource group you just created, then Select the Price Tier to **Public Website Transactions Level 1**.
+2. Fill the field name and select the resource group you just created, then set the Price Tier to **Public Website Transactions Level 1**.
 
-   >**Note:** In this case, the name is **BingMapsAPI**, you can take any name you like.
+   >**Note:** In this case, the name is **BingMapsAPI**, you can use any name you like.
 
    <kbd>![Create Bing Map](images/powerapps-iot-bing-map-create-form.png)</kbd>
    
-2. Click Legal terms, then click **Create**.
+2. Click **Legal terms**, then click **Create**.
 
    <kbd>![Bing Maps Legal Terms](images/powerapps-iot-bing-map-legal-terms.png)</kbd>
    
 2. Click **Create**.
 
-3. After creation complete, open the resource group you selected, then click the **BingMapsAPI** item.
+3. After the creation process is complete, open the resource group you selected and click the **BingMapsAPI** item.
 
    <kbd>![Select Bing Maps](images/powerapps-iot-bing-map-api.png)</kbd>
 
-3. Click the Key icon like this.
+3. Click the **Key icon**, like this.
 
    <kbd>![Select Bing Maps](images/powerapps-iot-bing-map-settings.png)</kbd>
 
-3. You can copy the **Master Key** or **Query Key** as **Bing Map API Key**
+3. You can copy the **Master Key** or **Query Key** as **Bing Map API Key**.  Save it to a text file, you will need it in subsequent steps.
 
    <kbd>![Select Bing Maps](images/powerapps-iot-bing-map-keys.png)</kbd>
 
@@ -395,7 +395,6 @@ This section describes how to create a Bing Maps API Key.
 Now the fun part, run the PowerApp!
 
 <summary><strong>Step-by-step instructions (expand for details)</strong></summary><p>   
-
    
 1. In a web browser, go to https://web.powerapps.com and login with your Office 365 account.
 
