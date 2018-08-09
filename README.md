@@ -1,6 +1,6 @@
 # Using PowerApps to visualize IoT data from Microsoft Azure
 
-In this module we show you how to use Azure to intake, process, analyze and store IoT data then visualize it in a Microsoft PowerApps app. Learn how to seamlessly combine the technologies to provide insights into data and take action on it instantly.
+In this code sample we show you how to use Azure to intake, process, analyze and store IoT data then visualize it in a Microsoft PowerApps app. Learn how to seamlessly combine the technologies to provide insights into data and take action on it instantly.
 
 When you are done installing this sample you will have a cool PowerApp that looks like this.  The PowerApps shows taxis driving around Beijing, China and if they are approching an oil change or are past the point where they need an oil change.
 
@@ -14,17 +14,17 @@ The following diagram illustrates the different components in the solution.
 
 ### How It Works
 
-The producer (a .Net console application) simulates sensors attached to taxis.  It reads data from .txt files that contain taxi data.  Each text file correlates to one taxi.  The producer emits data on a regular basis (this is configurable in the appsettings.json file), including the taxi's current location and distance traveled.  The producer sends the data to an Azure IoT Hub.
+The producer (a **.Net console application**) simulates sensors attached to taxis.  It reads data from **.txt files** that contain taxi data.  Each text file correlates to one taxi.  The producer emits data on a regular basis (this is configurable in the **appsettings.json file**), including the taxi's current location and distance traveled.  The producer sends the data to an **Azure IoT Hub**.
 
-Azure Stream Analytics reads the data from the IoT Hub and copies it to Azure Table Storage. 
+**Azure Stream Analytic**s reads the data from the IoT Hub and copies it to **Azure Table Storage**. 
 
-An Azure Function App reads the data from Azure Table Storage.
+An **Azure Function App** reads the data from Azure Table Storage.
 
-The PowerApp invokes a Custom Connector to call the Function App and return the data to the PowerApp where it is rendered.  A timer control in the PowerApp invokes the Custom Connector every time the timer reaches it's duration (in the app we have it set to 5 seconds by default).
+The **PowerApp** invokes a **Custom Connector** to call the Function App and return the data to the PowerApp where it is rendered.  A timer control in the PowerApp invokes the Custom Connector every time the timer reaches it's duration (in the app we have it set to 5 seconds by default).
 
 The PowerApp also makes calls through the Custom Connector to both read and write the last mileage a taxi had an oil change.  The last oil change data is stored in a different Table in Azure Table Storage.  The Custom Connector invokes Azure Functions to read and write this data.  The read operations are used to determine if a taxi is approaching an oil change or an oil change is past due.  These values are used to color code the taxis in the list and the pushpins on the map.  The write operation allows the maintenance manager to update the mileage when an oil change was made for each taxi. 
 
-There are also automated email notifications that are sent when a taxi is approaching an oil change or an oil change is past due.  To send these notifications an Azure Function triggers each time data is received by the IoT Hub.  The Azure Function evaluates the data to determine if a notification needs to be sent.  A Logic App is used to send notifications.  It uses an API Connection to Office 365 to send email via Outlook.  You can configure the email address where the notifications are sent in the ProcessTaxiDataFromIoTEventHub Azure Function by changing the value for the MaintenanceManager variable.
+There are also automated email notifications that are sent when a taxi is approaching an oil change or an oil change is past due.  To send these notifications an Azure Function triggers each time data is received by the IoT Hub.  The Azure Function evaluates the data to determine if a notification needs to be sent.  A **Logic App** is used to send notifications.  It uses an **API Connection** to Office 365 to send email via **Outlook**.  You can configure the email address where the notifications are sent in the **ProcessTaxiDataFromIoTEventHub** Azure Function by changing the value for the **MaintenanceManager** variable.
 
 ## Connectors
 
