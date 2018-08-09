@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 public static readonly string SendEmailFunctionURL = Environment.GetEnvironmentVariable("SendEmailFunctionURL", EnvironmentVariableTarget.Process);
 public static readonly string ConnectionString = Environment.GetEnvironmentVariable("WEBSITE_CONTENTAZUREFILECONNECTIONSTRING", EnvironmentVariableTarget.Process);
 
-public static readonly string MaintenanceManager = "huberts@canviz.com";
+public static readonly string MaintenanceManager = "ENTER YOUR MAINTENANCE MANAGER EMAIL ADDRESS HERE";
 public static readonly string MailSubject = "Oil Change Notification";
 public static readonly double OilChangeMileageThreshold = 4000;
 public static readonly double OilChangeMileageHighestLimit = 5000;
