@@ -425,6 +425,8 @@ Now the fun part, run the PowerApp!
 
    <kbd>![Start](images/powerapps-iot-view.png)</kbd>
 
+</p>
+</details>
 
 ### Follow Up
 
